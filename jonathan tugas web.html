@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulator</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-size: cover;
+        color: #fff;
+      }
+      .calculator {
+        max-width: 325px;
+        margin: 40px auto;
+        padding: 20px;
+        border: 1px solid #000000;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: rgba(26, 26, 26, 0.85);
+      }
+      .calculator-screen {
+        width: 100%;
+        height: 50px;
+        text-align: right;
+        margin-bottom: 20px;
+        padding-right: 20px;
+        padding-left: 20px;
+        border-radius: 10px;
+        border: 1px solid #ad7f7f;
+        background-color: #333;
+        color: #fff;
+      }
+      .calculator-keys button {
+        height: 45px;
+      }
+      .btn-light {
+        background-color: #584f4f;
+        color: #fff;
+      }
+      .btn-warning {
+        background-color: #316083;
+      }
+      .btn-danger {
+        background-color: #f89e28;
+      }
+      .btn-success {
+        background-color: #8400ff;
+      }
+      .btn-info {
+        background-color: #316083;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="calculator">
+        <input type="text" class="calculator-screen" value="" disabled />
+
+        <div class="calculator-keys">
+          <div class="row">
+            <div class="col-3">
+              <button type="button" class="btn btn-light btn-lg">7</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-light btn-lg">8</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-light btn-lg">9</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-warning btn-lg">/</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <button type="button" class="btn btn-light btn-lg">4</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-light btn-lg">5</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-light btn-lg">6</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-warning btn-lg">*</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <button type="button" class="btn btn-light btn-lg">1</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-light btn-lg">2</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-light btn-lg">3</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-warning btn-lg">-</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <button type="button" class="btn btn-light btn-lg">0</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-light btn-lg">.</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-danger btn-lg">C</button>
+            </div>
+            <div class="col-3">
+              <button type="button" class="btn btn-warning btn-lg">+</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <button type="button" class="btn btn-info btn-lg btn-block">
+                √
+              </button>
+            </div>
+            <div class="col-6">
+              <button type="button" class="btn btn-info btn-lg btn-block">
+                ^
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <button type="button" class="btn btn-success btn-lg btn-block">
+                =
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        let display = $(".calculator-screen");
+        let currentValue = "";
+        let previousValue = "";
+        let operator = "";
+
+        $(".btn-light").on("click", function () {
+          currentValue += $(this).text();
+          display.val(currentValue);
+        });
+
+        $(".btn-warning").on("click", function () {
+          operator = $(this).text();
+          previousValue = currentValue;
+          currentValue = "";
+        });
+
+        $(".btn-info").on("click", function () {
+          operator = $(this).text();
+          if (operator === "√") {
+            currentValue = Math.sqrt(parseFloat(currentValue)).toString();
+            display.val(currentValue);
+            operator = "";
+          } else {
+            previousValue = currentValue;
+            currentValue = "";
+          }
+        });
+
+        $(".btn-success").on("click", function () {
+          let result;
+          switch (operator) {
+            case "+":
+              result = parseFloat(previousValue) + parseFloat(currentValue);
+              break;
+            case "-":
+              result = parseFloat(previousValue) - parseFloat(currentValue);
+              break;
+            case "*":
+              result = parseFloat(previousValue) * parseFloat(currentValue);
+              break;
+            case "/":
+              result = parseFloat(previousValue) / parseFloat(currentValue);
+              break;
+            case "^":
+              result = Math.pow(
+                parseFloat(previousValue),
+                parseFloat(currentValue)
+              );
+              break;
+          }
+          display.val(result);
+          currentValue = result;
+          previousValue = "";
+          operator = "";
+        });
+
+        $(".btn-danger").on("click", function () {
+          currentValue = "";
+          previousValue = "";
+          operator = "";
+          display.val("");
+        });
+      });
+    </script>
+  </body>
+</html>
